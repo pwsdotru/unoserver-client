@@ -1,0 +1,10 @@
+services:
+  app:
+    build:
+      context: ./tests/docker/
+      dockerfile: unoserver.Dockerfile
+    container_name: unoserver-tests
+    volumes:
+      - ./data:/data
+    ports:
+      - "2003:2003"

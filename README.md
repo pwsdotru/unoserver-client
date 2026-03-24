@@ -8,10 +8,17 @@
 
 #### Run for tests
 
-Docker file for tests [./tests/docker/unoserver.Dockerfile](./tests/docker/unoserver.Dockerfile)
+Docker files for tests in folder [./tests/docker/](./tests/docker/)
 
-Build container
+File [./docker-compose.yml](./docker-compose.yml) for operations with Docker container
+Build container (command in project root) 
 
 ```
 docker-compose build
+```
+
+Start container for tests (command in project root)
+
+```
+docker-compose up
 ```

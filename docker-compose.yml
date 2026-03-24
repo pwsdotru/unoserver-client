@@ -5,6 +5,6 @@ services:
       dockerfile: unoserver.Dockerfile
     container_name: unoserver-tests
     volumes:
-      - ./data:/data
+      - ./tests/docker/data:/data
     ports:
       - "2003:2003"

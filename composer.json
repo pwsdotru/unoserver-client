@@ -1,0 +1,42 @@
+{
+  "name": "pwsdotru/unoserver-client",
+  "description": "PHP client for Unoserver",
+  "type": "library",
+  "license": "GPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "Aleksandr Novikov",
+      "email": "pwsdotru@gmail.com",
+      "homepage": "https://github.com/pwsdotru"
+    }
+  ],
+  "keywords": [
+    "unoserver",
+    "client",
+    "convert",
+    "compare"
+  ],
+  "require": {
+    "php": ">=7.4 || >=8.0",
+    "ext-xmlrpc": "*",
+    "ext-curl": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "9.x || 10.x || 11.x || 12.*",
+    "squizlabs/php_codesniffer": "3.5.* || 3.6.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "UnoserverClient\\": "src/"
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit -c phpunit.xml",
+    "style:check": "vendor/bin/phpcs",
+    "style:fix": "vendor/bin/phpcbf",
+    "git:prepush": [
+      "@style:check",
+      "@test"
+    ]
+  }
+}

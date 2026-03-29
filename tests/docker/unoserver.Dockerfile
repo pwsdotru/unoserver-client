@@ -58,4 +58,5 @@ ENV HOME="/home/worker"
 
 VOLUME ["/data"]
 EXPOSE 2003
+EXPOSE 2002
 ENTRYPOINT ["/entrypoint.sh"]

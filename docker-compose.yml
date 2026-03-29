@@ -8,3 +8,4 @@ services:
       - ./tests/docker/data:/data
     ports:
       - "2003:2003"
+      - "2002:2002"

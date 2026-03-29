@@ -18,14 +18,13 @@ if (empty($filename) || !file_exists($filename)) {
     exit(2);
 }
 
-//$params['indata'] = file_get_contents($filename);
-$params['indata'] = 'test string';
+$filebody = file_get_contents($filename);
+xmlrpc_set_type($filebody, "base64");
+$params["indata"] = $filebody;
+
 $params["convert_to"] = "pdf";
-$params["outpath"] = null; //"None";
 
 $request = xmlrpc_encode_request($method, $params, ['encoding' => 'UTF-8']);
-
-print_r($request);
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $url);

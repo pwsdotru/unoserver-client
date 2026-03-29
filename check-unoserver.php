@@ -6,7 +6,26 @@ $url = "http://127.0.0.1:2003"; //Host nad port for Unoserver
 $method = "convert"; //check for convert method
 $params = [];
 
-$request = xmlrpc_encode_request($method, $params);
+if (count($argv) <= 1) {
+    printf("Usage file name for convert as argument for command line\n");
+    exit(1);
+}
+
+$filename = $argv[1] ?? "";
+
+if (empty($filename) || !file_exists($filename)) {
+    printf("Error. Filename is incorrect or file %s not exists\n", $filename);
+    exit(2);
+}
+
+//$params['indata'] = file_get_contents($filename);
+$params['indata'] = 'test string';
+$params["convert_to"] = "pdf";
+$params["outpath"] = null; //"None";
+
+$request = xmlrpc_encode_request($method, $params, ['encoding' => 'UTF-8']);
+
+print_r($request);
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $url);

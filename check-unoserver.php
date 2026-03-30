@@ -20,11 +20,11 @@ if (empty($filename) || !file_exists($filename)) {
 
 $filebody = file_get_contents($filename);
 xmlrpc_set_type($filebody, "base64");
-$params["indata"] = $filebody;
 
-$params["convert_to"] = "pdf";
+$params = array(null, $filebody, null, "pdf");
 
 $request = xmlrpc_encode_request($method, $params, ['encoding' => 'UTF-8']);
+$request = str_replace("<string/>", "<nil/>", $request);
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $url);
@@ -40,11 +40,24 @@ if (curl_errno($ch)) {
     printf("\n\nServer response: \n \n %s \n", $response);
 } else {
     curl_close($ch);
-    $result = xmlrpc_decode($response);
+    $result = xmlrpc_decode($response, 'UTF-8');
 
-    if (xmlrpc_is_fault($result)) {
-        printf("XML-RPC Fault with code  %s: %s \n",  (string)$result['faultCode'], $result['faultString']);
+    if (is_array($result)) {
+        if (xmlrpc_is_fault($result)) {
+            printf("XML-RPC Fault with code  %s: %s \n", (string)$result['faultCode'], $result['faultString']);
+        } else {
+            printf("\n\nResult from the server: \n %s \n", print_r($result, 1));
+        }
     } else {
-        printf("\n\nResult from the server: \n %s \n", $result);
+        if (is_object($result) && property_exists($result, 'scalar') &&
+        property_exists($result, 'xmlrpc_type') && $result->xmlrpc_type === 'base64') {
+            $resultfile = $filename . ".pdf";
+            printf("Processed. Save file to: %s\n", $resultfile);
+            if (file_put_contents($resultfile, $result->scalar)) {
+                printf("Saved\n");
+            }
+        } else {
+            printf("Error: Unknow object in result: %s\n", print_r($result, true));
+        }
     }
 }

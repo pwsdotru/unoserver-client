@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 $url = "http://127.0.0.1:2003"; //Host nad port for Unoserver
-$method = "convert"; //check for convert method
+$method = "info"; //check for convert method
 $params = [];
 
 $request = xmlrpc_encode_request($method, $params);
@@ -27,6 +27,6 @@ if (curl_errno($ch)) {
     if (xmlrpc_is_fault($result)) {
         printf("XML-RPC Fault with code  %s: %s \n",  (string)$result['faultCode'], $result['faultString']);
     } else {
-        printf("\n\nResult from the server: \n %s \n", $result);
+        printf("\n\nResult from the server: \n %s \n", print_r($result, true));
     }
 }

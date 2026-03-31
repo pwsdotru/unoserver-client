@@ -1,4 +1,5 @@
 .idea
 vendor
 tests/docker/data
-
+.phpunit*
+test.docx.pdf

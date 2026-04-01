@@ -10,4 +10,9 @@ class Compare extends Client
     {
         return "compare";
     }
+
+    protected function validateInput(): bool
+    {
+        return false;
+    }
 }

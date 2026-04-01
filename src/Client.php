@@ -10,6 +10,10 @@ abstract class Client
     protected string $_port;
     protected bool $_ssl;
 
+    /** @var array list of params for xmlrpc call. Params is unnamed, so order is important */
+    protected $fieldsList = [];
+    protected $params = [];
+
     /**
      * Client constructor.
      * @param string $host
@@ -23,7 +27,29 @@ abstract class Client
     }
 
     /**
+     * Make call to API
+     * @return bool
+     */
+    public function call(): bool
+    {
+        return true;
+    }
+
+    protected function buildParams(): array
+    {
+        $result = [];
+        foreach ($this->fieldsList as $paramName) {
+            $result[] = $this->params[$paramName] ?? null;
+        }
+        return $result;
+    }
+    /**
      * @return string - method name for call server
      */
     abstract protected function getMethodName(): string;
+
+    /**
+     * @return bool - method for validate input params
+     */
+    abstract protected function validateInput(): bool;
 }

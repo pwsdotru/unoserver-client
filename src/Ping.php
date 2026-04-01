@@ -10,4 +10,9 @@ class Ping extends Client
     {
         return "info";
     }
+
+    protected function validateInput(): bool
+    {
+        return true;
+    }
 }

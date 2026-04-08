@@ -15,4 +15,10 @@ class Ping extends Client
     {
         return true;
     }
+
+    protected function parseResult(): bool
+    {
+        $this->_result = $this->_rawresult;
+        return true;
+    }
 }

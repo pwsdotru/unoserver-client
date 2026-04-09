@@ -71,8 +71,10 @@ abstract class Client
 
         if (is_array($rawresult)) {
             if (xmlrpc_is_fault($rawresult)) {
-                $this->_errors[] = sprintf("XML-RPC Fault with code  %s: %s \n",
-                    (string)$rawresult['faultCode'], $rawresult['faultString']
+                $this->_errors[] = sprintf(
+                    "XML-RPC Fault with code  %s: %s \n",
+                    (string)$rawresult['faultCode'],
+                    $rawresult['faultString']
                 );
                 return false;
             }
@@ -107,7 +109,7 @@ abstract class Client
 
     protected function getUrl(): string
     {
-        $protocol = $this->_ssl?"https":"http";
+        $protocol = $this->_ssl ? "https" : "http";
         return $protocol . "://" . $this->_host . ":" . $this->_port;
     }
     protected function buildParams(): array
@@ -129,7 +131,7 @@ abstract class Client
     abstract protected function validateInput(): bool;
 
     /**
-     * @return mixed - method return result of request
+     * @return bool - method return true if correct result of request
      */
     abstract protected function parseResult(): bool;
 }

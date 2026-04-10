@@ -25,7 +25,7 @@ if (curl_errno($ch)) {
     $result = xmlrpc_decode($response);
 
     if (xmlrpc_is_fault($result)) {
-        printf("XML-RPC Fault with code  %s: %s \n",  (string)$result['faultCode'], $result['faultString']);
+        printf("XML-RPC Fault with code  %s: %s \n", (string)$result['faultCode'], $result['faultString']);
     } else {
         printf("\n\nResult from the server: \n %s \n", print_r($result, true));
     }

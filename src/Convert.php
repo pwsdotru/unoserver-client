@@ -35,14 +35,22 @@ class Convert extends Client
         return "convert";
     }
 
+    protected function parseResult(): bool
+    {
+        $this->_result = $this->_rawresult;
+        return true;
+    }
+
     protected function validateInput(): bool
     {
         $err = 0;
         if (empty($this->params["indata"])) {
+            $this->_errors[] = sprintf("You should define source data for convert");
             $err++;
         }
 
         if (empty($this->params["convert_to"])) {
+            $this->_errors[] = sprintf("You should define format for output");
             $err++;
         }
 

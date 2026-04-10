@@ -49,8 +49,10 @@ if (curl_errno($ch)) {
             printf("\n\nResult from the server: \n %s \n", print_r($result, 1));
         }
     } else {
-        if (is_object($result) && property_exists($result, 'scalar') &&
-        property_exists($result, 'xmlrpc_type') && $result->xmlrpc_type === 'base64') {
+        if (
+            is_object($result) && property_exists($result, 'scalar') &&
+            property_exists($result, 'xmlrpc_type') && $result->xmlrpc_type === 'base64'
+        ) {
             $resultfile = $filename . ".pdf";
             printf("Processed. Save file to: %s\n", $resultfile);
             if (file_put_contents($resultfile, $result->scalar)) {

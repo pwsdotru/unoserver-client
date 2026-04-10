@@ -72,7 +72,7 @@ abstract class Client
         if (is_array($rawresult)) {
             if (xmlrpc_is_fault($rawresult)) {
                 $this->_errors[] = sprintf(
-                    "XML-RPC Fault with code  %s: %s \n",
+                    "XML-RPC Fault with code  %s: %s",
                     (string)$rawresult['faultCode'],
                     $rawresult['faultString']
                 );
@@ -98,8 +98,8 @@ abstract class Client
         $response = curl_exec($ch);
 
         if (curl_errno($ch)) {
-            $this->_errors[] = sprintf("cURL error No %d %s\n", curl_errno($ch), curl_error($ch));
-            $this->_errors[] = sprintf("\n\nServer response: \n \n %s \n", $response);
+            $this->_errors[] = sprintf("cURL error No %d %s", curl_errno($ch), curl_error($ch));
+            $this->_errors[] = sprintf("Server response: %s ", $response);
             $response = null;
         }
         curl_close($ch);
@@ -107,16 +107,25 @@ abstract class Client
         return $response;
     }
 
+    /**
+     * Build URL for XML-PPC request
+     * @return string
+     */
     protected function getUrl(): string
     {
         $protocol = $this->_ssl ? "https" : "http";
         return $protocol . "://" . $this->_host . ":" . $this->_port;
     }
+
     protected function buildParams(): array
     {
         $result = [];
         foreach ($this->fieldsList as $paramName) {
-            $result[] = $this->params[$paramName] ?? null;
+            if (array_key_exists($paramName, $this->params)) {
+                $result[] = $this->params[$paramName];
+            } else {
+                $result[] = null;
+            }
         }
         return $result;
     }

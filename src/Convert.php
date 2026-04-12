@@ -45,12 +45,12 @@ class Convert extends Client
     {
         $err = 0;
         if (empty($this->params["indata"])) {
-            $this->_errors[] = sprintf("You should define source data for convert");
+            $this->logError(sprintf("You should define source data for convert"));
             $err++;
         }
 
         if (empty($this->params["convert_to"])) {
-            $this->_errors[] = sprintf("You should define format for output");
+            $this->logError(sprintf("You should define format for output"));
             $err++;
         }
 

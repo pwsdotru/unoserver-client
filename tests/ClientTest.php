@@ -43,6 +43,17 @@ final class ClientTest extends TestCase
         ];
     }
 
+    public function testLogError(): void
+    {
+        $obj = $this->getMockForAbstractClass('UnoserverClient\Client');
+        $reflectionClass = new ReflectionClass($obj);
+        $method = $reflectionClass->getMethod("logError");
+        $method->setAccessible(true);
+        $method->invoke($obj, "Test error");
+        self::assertEquals(["Test error"], $obj->errors());
+        $method->invoke($obj, "Test error 2");
+        self::assertEquals(["Test error", "Test error 2"], $obj->errors());
+    }
     protected static function getPrivateProperty(object $object, string $propertyName)
     {
         $reflectionClass = new ReflectionClass($object);

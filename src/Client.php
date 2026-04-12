@@ -47,7 +47,10 @@ abstract class Client
         return false;
     }
 
-
+    /**
+     * Return API call result
+     * @return mixed
+     */
     public function result()
     {
         return $this->_result;
@@ -71,11 +74,11 @@ abstract class Client
 
         if (is_array($rawresult)) {
             if (xmlrpc_is_fault($rawresult)) {
-                $this->_errors[] = sprintf(
+                $this->logError(sprintf(
                     "XML-RPC Fault with code  %s: %s",
                     (string)$rawresult['faultCode'],
                     $rawresult['faultString']
-                );
+                ));
                 return false;
             }
         }
@@ -98,8 +101,8 @@ abstract class Client
         $response = curl_exec($ch);
 
         if (curl_errno($ch)) {
-            $this->_errors[] = sprintf("cURL error No %d %s", curl_errno($ch), curl_error($ch));
-            $this->_errors[] = sprintf("Server response: %s ", $response);
+            $this->logError(sprintf("cURL error No %d %s", curl_errno($ch), curl_error($ch)));
+            $this->logError(sprintf("Server response: %s ", $response));
             $response = null;
         }
         curl_close($ch);
@@ -107,6 +110,13 @@ abstract class Client
         return $response;
     }
 
+    /**
+     * @param string $error - Error string
+     */
+    protected function logError(string $error): void
+    {
+        $this->_errors[] = $error;
+    }
     /**
      * Build URL for XML-PPC request
      * @return string

@@ -40,6 +40,8 @@ final class ClientTest extends TestCase
         return [
             ["127.0.0.1", "2003", false, "http://127.0.0.1:2003"],
             ["host", "4000", true, "https://host:4000"],
+            ["http://127.0.0.1", "2003", false, "http://127.0.0.1:2003"],
+            ["https://unoserver.loc", "2010", true, "https://unoserver.loc:2010"],
         ];
     }
 

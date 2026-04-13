@@ -125,7 +125,16 @@ abstract class Client
     protected function getUrl(): string
     {
         $protocol = $this->_ssl ? "https" : "http";
-        return $protocol . "://" . $this->_host . ":" . $this->_port;
+
+        $host = $this->_host;
+        if ("http://" === strtolower(substr($host, 0, 7))) {
+            $host = substr($host, 7);
+        }
+        if ("https://" === strtolower(substr($host, 0, 8))) {
+            $host = substr($host, 8);
+        }
+
+        return $protocol . "://" . $host . ":" . $this->_port;
     }
 
     protected function buildParams(): array

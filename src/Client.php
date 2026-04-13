@@ -67,7 +67,8 @@ abstract class Client
         $request = str_replace("<string/>", "<nil/>", $request);
 
         $response = $this->makeCurl($request);
-        if (null === $response) {
+        if (empty($response)) {
+            $this->logError("Empty response from Unoserver");
             return false;
         }
         $rawresult = xmlrpc_decode($response, 'UTF-8');

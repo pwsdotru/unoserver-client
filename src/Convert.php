@@ -30,6 +30,49 @@ class Convert extends Client
         "password" => null,
     ];
 
+    /**
+     * Set output format for convert
+     * @param string $format
+     */
+    public function setOutputFormat(string $format): void
+    {
+        $this->params["convert_to"] = strtolower($format);
+    }
+
+    /**
+     * Set input binary data for convert
+     * @param string $data
+     */
+    public function setInputData(string $data): void
+    {
+        xmlrpc_set_type($data, "base64");
+        $this->params["indata"] = $data;
+    }
+
+    /**
+     * Load file for convert
+     * @param string $filename
+     * @return bool
+     */
+    public function loadFile(string $filename): bool
+    {
+        $data = file_get_contents($filename);
+        $this->setInputData($data);
+        return true;
+    }
+
+    /**
+     * Save result to file
+     * @param string $filename
+     * @return bool
+     */
+    public function saveFile(string $filename): bool
+    {
+        $data = $this->result();
+        file_put_contents($filename, $data);
+        return true;
+    }
+
     protected function getMethodName(): string
     {
         return "convert";
@@ -37,8 +80,15 @@ class Convert extends Client
 
     protected function parseResult(): bool
     {
-        $this->_result = $this->_rawresult;
-        return true;
+        if (
+            is_object($this->_rawresult) && property_exists($this->_rawresult, 'scalar') &&
+            property_exists($this->_rawresult, 'xmlrpc_type') && $this->_rawresult->xmlrpc_type === 'base64'
+        ) {
+            $this->_result = $this->_rawresult->scalar;
+            return true;
+        }
+        $this->logError(sprintf("Wrong return result"));
+        return false;
     }
 
     protected function validateInput(): bool

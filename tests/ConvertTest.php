@@ -43,9 +43,44 @@ final class ConvertTest extends TestCase
     {
         $empty = [null, null, null, null, null, [], true, null, null];
         $obj = new Convert();
+
+        self::assertEquals($empty, $this->getConvertParams($obj));
+    }
+
+    /**
+     * @param $input
+     * @param $expected
+     * @throws \ReflectionException
+     * @dataProvider setOutputFormatSet
+     * @covers UnoserverClient\Convert::setOutputFormat
+     */
+    public function testSetOutputFormat($input, $expected): void
+    {
+        $obj = new Convert();
+        $obj->setOutputFormat($input);
+        $params = $this->getConvertParams($obj);
+        self::assertEquals($expected, $params[3]);
+    }
+
+    public static function setOutputFormatSet(): array
+    {
+        return [
+            ["pdf", "pdf"],
+            ["JPG", "jpg"],
+        ];
+    }
+
+    /**
+     * Service method for access to UnoserverClient\Convert::buildParams
+     * @param Convert $obj
+     * @return array
+     * @throws \ReflectionException
+     */
+    protected function getConvertParams(Convert $obj): array
+    {
         $reflectionClass = new ReflectionClass($obj);
         $method = $reflectionClass->getMethod("buildParams");
         $method->setAccessible(true);
-        self::assertEquals($empty, $method->invoke($obj));
+        return $method->invoke($obj);
     }
 }

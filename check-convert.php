@@ -21,7 +21,10 @@ if (empty($filename) || !file_exists($filename)) {
 
 $convert = new UnoserverClient\Convert($host, $port);
 $convert->setOutputFormat("pdf");
-$convert->loadFile($filename);
+if (false === $convert->loadFile($filename)) {
+    printf("Error. Can't load file.\n%s\n", implode("\n", $convert->errors()));
+    exit(3);
+}
 
 if ($convert->call()) {
     $resultfile = $filename . ".pdf";

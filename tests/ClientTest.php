@@ -45,6 +45,27 @@ final class ClientTest extends TestCase
         ];
     }
 
+    public function testReadFileSuccess(): void
+    {
+        $obj = $this->getMockForAbstractClass('UnoserverClient\Client');
+        $reflectionClass = new ReflectionClass($obj);
+        $method = $reflectionClass->getMethod("readFile");
+        $method->setAccessible(true);
+        $data = $method->invoke($obj, __DIR__ . "/fixtures/test.txt");
+        self::assertEquals("TestFileContent", $data);
+    }
+
+    public function testReadFileFail(): void
+    {
+        $obj = $this->getMockForAbstractClass('UnoserverClient\Client');
+        $reflectionClass = new ReflectionClass($obj);
+        $method = $reflectionClass->getMethod("readFile");
+        $method->setAccessible(true);
+        $data = $method->invoke($obj, __DIR__ . "/fixtures/nftoound.txt");
+        self::assertNull($data);
+        self::assertNotEmpty(self::getPrivateProperty($obj, '_errors'));
+    }
+
     public function testLogError(): void
     {
         $obj = $this->getMockForAbstractClass('UnoserverClient\Client');
@@ -56,6 +77,7 @@ final class ClientTest extends TestCase
         $method->invoke($obj, "Test error 2");
         self::assertEquals(["Test error", "Test error 2"], $obj->errors());
     }
+
     protected static function getPrivateProperty(object $object, string $propertyName)
     {
         $reflectionClass = new ReflectionClass($object);

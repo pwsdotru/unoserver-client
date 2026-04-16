@@ -56,9 +56,12 @@ class Convert extends Client
      */
     public function loadFile(string $filename): bool
     {
-        $data = file_get_contents($filename);
-        $this->setInputData($data);
-        return true;
+        $data = $this->readFile($filename);
+        if (null !== $data) {
+            $this->setInputData($data);
+            return true;
+        }
+        return false;
     }
 
     /**

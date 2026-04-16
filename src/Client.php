@@ -56,12 +56,37 @@ abstract class Client
         return $this->_result;
     }
 
+    /**
+     * Return list of errors
+     * @return array
+     */
     public function errors(): array
     {
         return $this->_errors;
     }
 
-    protected function makeXmlRpc($params): bool
+    /**
+     * Read file and return binary data.
+     * Return null on error
+     * @param string $filename
+     * @return mixed binary data
+     */
+    protected function readFile(string $filename): ?string
+    {
+        if (file_exists($filename) && is_readable($filename)) {
+            $data = file_get_contents($filename);
+            if (false !== $data) {
+                return $data;
+            } else {
+                $this->logError((sprintf("Can't read file \"%s\"", $filename)));
+            }
+        } else {
+            $this->logError(sprintf("File \"%s\" not exists or is not readable", $filename));
+        }
+        return null;
+    }
+
+    protected function makeXmlRpc(array $params): bool
     {
         $request = xmlrpc_encode_request($this->getMethodName(), $params, ['encoding' => 'UTF-8']);
         $request = str_replace("<string/>", "<nil/>", $request);

@@ -64,18 +64,6 @@ class Convert extends Client
         return false;
     }
 
-    /**
-     * Save result to file
-     * @param string $filename
-     * @return bool
-     */
-    public function saveFile(string $filename): bool
-    {
-        $data = $this->result();
-        file_put_contents($filename, $data);
-        return true;
-    }
-
     protected function getMethodName(): string
     {
         return "convert";

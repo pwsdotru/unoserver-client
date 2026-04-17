@@ -86,6 +86,26 @@ abstract class Client
         return null;
     }
 
+    /**
+     * Save result to file
+     * @param string $filename
+     * @return bool
+     */
+    public function saveFile(string $filename): bool
+    {
+        $data = $this->result();
+        if (!empty($data)) {
+            $res = file_put_contents($filename, $data);
+            if ($res !== false) {
+                return true;
+            }
+            $this->logError(sprintf("Can't write file \"%s\"", $filename));
+        } else {
+            $this->logError(sprintf("Can't save file. Content is empty"));
+        }
+        return false;
+    }
+
     protected function makeXmlRpc(array $params): bool
     {
         $request = xmlrpc_encode_request($this->getMethodName(), $params, ['encoding' => 'UTF-8']);

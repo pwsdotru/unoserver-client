@@ -28,8 +28,13 @@ if (false === $convert->loadFile($filename)) {
 
 if ($convert->call()) {
     $resultfile = $filename . ".pdf";
-    $convert->saveFile($resultfile);
-    printf("Convert result: %s\n", $resultfile);
+    if ($convert->saveFile($resultfile)) {
+        printf("Convert result: %s\n", $resultfile);
+    } else {
+        $errors = $convert->errors();
+        echo("Save result errors:\n");
+        print_r($errors);
+    }
 } else {
     $errors = $convert->errors();
     echo("Convert errors:\n");

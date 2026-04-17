@@ -61,8 +61,16 @@ final class ClientTest extends TestCase
         $reflectionClass = new ReflectionClass($obj);
         $method = $reflectionClass->getMethod("readFile");
         $method->setAccessible(true);
-        $data = $method->invoke($obj, __DIR__ . "/fixtures/nftoound.txt");
+        $data = $method->invoke($obj, __DIR__ . "/fixtures/notfound.txt");
         self::assertNull($data);
+        self::assertNotEmpty(self::getPrivateProperty($obj, '_errors'));
+    }
+
+    public function testSaveFileFail(): void
+    {
+        $obj = $this->getMockForAbstractClass('UnoserverClient\Client');
+        $result = $obj->saveFile("empty.txt");
+        self::assertFalse($result);
         self::assertNotEmpty(self::getPrivateProperty($obj, '_errors'));
     }
 

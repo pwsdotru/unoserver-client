@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests;
+namespace unit;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -70,6 +70,37 @@ final class ConvertTest extends TestCase
         ];
     }
 
+    /**
+     * @throws \ReflectionException
+     * @covers UnoserverClient\Convert::loadFile
+     */
+    public function testLoadFile(): void
+    {
+        $file = dirname(__DIR__) . "/fixtures/test.txt";
+        $obj = new Convert();
+        $obj->loadFile($file);
+        $params = $this->getConvertParams($obj);
+        self::assertNotEmpty($params[1]);
+        self::assertIsObject($params[1]);
+        self::assertObjectHasProperty("scalar", $params[1]);
+        self::assertStringEqualsFile($file, $params[1]->scalar);
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @covers UnoserverClient\Convert::setInputData
+     */
+    public function testSetInputData(): void
+    {
+        $test = "test string";
+        $obj = new Convert();
+        $obj->setInputData($test);
+        $params = $this->getConvertParams($obj);
+        self::assertNotEmpty($params[1]);
+        self::assertIsObject($params[1]);
+        self::assertObjectHasProperty("scalar", $params[1]);
+        self::assertEquals($test, $params[1]->scalar);
+    }
     /**
      * Service method for access to UnoserverClient\Convert::buildParams
      * @param Convert $obj

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests;
+namespace unit;
 
 use ReflectionClass;
 use PHPUnit\Framework\TestCase;
@@ -45,16 +45,25 @@ final class ClientTest extends TestCase
         ];
     }
 
+    /**
+     * @throws \ReflectionException
+     * @covers UnoserverClient\Client::readFile
+     */
     public function testReadFileSuccess(): void
     {
+        $file = dirname(__DIR__) . "/fixtures/test.txt";
         $obj = $this->getMockForAbstractClass('UnoserverClient\Client');
         $reflectionClass = new ReflectionClass($obj);
         $method = $reflectionClass->getMethod("readFile");
         $method->setAccessible(true);
-        $data = $method->invoke($obj, __DIR__ . "/fixtures/test.txt");
-        self::assertEquals("TestFileContent", $data);
+        $data = $method->invoke($obj, $file);
+        self::assertStringEqualsFile($file, $data);
     }
 
+    /**
+     * @throws \ReflectionException
+     * @covers UnoserverClient\Client::readFile
+     */
     public function testReadFileFail(): void
     {
         $obj = $this->getMockForAbstractClass('UnoserverClient\Client');
@@ -66,6 +75,9 @@ final class ClientTest extends TestCase
         self::assertNotEmpty(self::getPrivateProperty($obj, '_errors'));
     }
 
+    /**
+     * @covers UnoserverClient\Client::saveFile
+     */
     public function testSaveFileFail(): void
     {
         $obj = $this->getMockForAbstractClass('UnoserverClient\Client');
@@ -74,6 +86,11 @@ final class ClientTest extends TestCase
         self::assertNotEmpty(self::getPrivateProperty($obj, '_errors'));
     }
 
+    /**
+     * @throws \ReflectionException
+     * @covers UnoserverClient\Client::logError
+     * @covers UnoserverClient\Client::errors
+     */
     public function testLogError(): void
     {
         $obj = $this->getMockForAbstractClass('UnoserverClient\Client');

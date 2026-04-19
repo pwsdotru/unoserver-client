@@ -24,6 +24,65 @@ class Compare extends Client
         "filetype" => null,
     ];
 
+    /**
+     * Set output format for output
+     * @param string $format
+     */
+    public function setOutputFormat(string $format): void
+    {
+        $this->params["filetype"] = strtolower($format);
+    }
+
+    /**
+     * Set input binary data for old file
+     * @param string $data
+     */
+    public function setOldData(string $data): void
+    {
+        xmlrpc_set_type($data, "base64");
+        $this->params["olddata"] = $data;
+    }
+
+    /**
+     * Set input binary data for new file
+     * @param string $data
+     */
+    public function setNewData(string $data): void
+    {
+        xmlrpc_set_type($data, "base64");
+        $this->params["newdata"] = $data;
+    }
+
+    /**
+     * Load file for old file
+     * @param string $filename
+     * @return bool
+     */
+    public function loadOldFile(string $filename): bool
+    {
+        $data = $this->readFile($filename);
+        if (null !== $data) {
+            $this->setOldData($data);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Load file for new file
+     * @param string $filename
+     * @return bool
+     */
+    public function loadNewFile(string $filename): bool
+    {
+        $data = $this->readFile($filename);
+        if (null !== $data) {
+            $this->setNewData($data);
+            return true;
+        }
+        return false;
+    }
+
     protected function getMethodName(): string
     {
         return "compare";

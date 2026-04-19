@@ -2,4 +2,5 @@
 vendor
 tests/docker/data
 .phpunit*
-test.docx.pdf
+test.docx.*
+compareresult.*

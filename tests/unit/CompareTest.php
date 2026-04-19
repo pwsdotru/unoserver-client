@@ -44,16 +44,102 @@ final class CompareTest extends TestCase
         $empty = [null, null, null, null, null, null];
         $obj = new Compare();
 
-        self::assertEquals($empty, $this->getConvertParams($obj));
+        self::assertEquals($empty, $this->getCompareParams($obj));
     }
 
     /**
-     * Service method for access to UnoserverClient\Convert::buildParams
+     * @param $input
+     * @param $expected
+     * @throws \ReflectionException
+     * @dataProvider setOutputFormatSet
+     * @covers UnoserverClient\Compare::setOutputFormat
+     */
+    public function testSetOutputFormat($input, $expected): void
+    {
+        $obj = new Compare();
+        $obj->setOutputFormat($input);
+        $params = $this->getCompareParams($obj);
+        self::assertEquals($expected, $params[5]);
+    }
+
+    public static function setOutputFormatSet(): array
+    {
+        return [
+            ["pdf", "pdf"],
+            ["DOCX", "docx"],
+        ];
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @covers UnoserverClient\Compare::loadOldFile
+     */
+    public function testLoadOldFile(): void
+    {
+        $file = dirname(__DIR__) . "/fixtures/test.txt";
+        $obj = new Compare();
+        $obj->loadOldFile($file);
+        $params = $this->getCompareParams($obj);
+        self::assertNotEmpty($params[1]);
+        self::assertIsObject($params[1]);
+        self::assertObjectHasProperty("scalar", $params[1]);
+        self::assertStringEqualsFile($file, $params[1]->scalar);
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @covers UnoserverClient\Compare::setOldData
+     */
+    public function testSetOldData(): void
+    {
+        $test = "test string";
+        $obj = new Compare();
+        $obj->setOldData($test);
+        $params = $this->getCompareParams($obj);
+        self::assertNotEmpty($params[1]);
+        self::assertIsObject($params[1]);
+        self::assertObjectHasProperty("scalar", $params[1]);
+        self::assertEquals($test, $params[1]->scalar);
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @covers UnoserverClient\Conpare::loadNewFile
+     */
+    public function testLoadNewFile(): void
+    {
+        $file = dirname(__DIR__) . "/fixtures/test.txt";
+        $obj = new Compare();
+        $obj->loadNewFile($file);
+        $params = $this->getCompareParams($obj);
+        self::assertNotEmpty($params[3]);
+        self::assertIsObject($params[3]);
+        self::assertObjectHasProperty("scalar", $params[3]);
+        self::assertStringEqualsFile($file, $params[3]->scalar);
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @covers UnoserverClient\Compare::setNewData
+     */
+    public function testSetNewData(): void
+    {
+        $test = "test string";
+        $obj = new Compare();
+        $obj->setNewData($test);
+        $params = $this->getCompareParams($obj);
+        self::assertNotEmpty($params[3]);
+        self::assertIsObject($params[3]);
+        self::assertObjectHasProperty("scalar", $params[3]);
+        self::assertEquals($test, $params[3]->scalar);
+    }
+    /**
+     * Service method for access to UnoserverClient\Compare::buildParams
      * @param Compare $obj
      * @return array
      * @throws \ReflectionException
      */
-    protected function getConvertParams(Compare $obj): array
+    protected function getCompareParams(Compare $obj): array
     {
         $reflectionClass = new ReflectionClass($obj);
         $method = $reflectionClass->getMethod("buildParams");

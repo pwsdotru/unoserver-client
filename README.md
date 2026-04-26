@@ -1,5 +1,7 @@
 ## PHP Client for Unoserver
 
+PHP Client connect to remote UnoServer via XMLRPC.
+
 ### Unoserver
 
 [Unoserver](https://github.com/unoconv/unoserver) using LibreOffice as a server for converting documents.
@@ -52,10 +54,10 @@ php 8.3
 ````shell script
 dnf install php83-php-pecl-xmlrpc
 ````
-###Install
+### Install
 
 ````
-
+composer require pwsdotru/unoserver-client
 ````
 
 ### Usage

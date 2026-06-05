@@ -1,6 +1,6 @@
 ## PHP Client for Unoserver
 
-PHP Client connect to remote UnoServer via XMLRPC.
+PHP Client for connect to remote UnoServer via XMLRPC.
 
 ### Unoserver
 
@@ -26,10 +26,10 @@ Start container for tests (command in project root)
 docker-compose up
 ```
 
-Unoserve listen on localhost (127.0.0.1) and port 2003
+Unoserver listen on localhost (127.0.0.1) and port 2003
 
-For check that server start run script [check-xmlrpc.php](./check-xmlrpc.php). 
-It should output informatino about Unosrver and LibreOffice.
+For check that server runing use script [check-xmlrpc.php](./check-xmlrpc.php). 
+It should output informatino about Unoserver and LibreOffice.
 
 ````shell script
 php -f check-xmlrpc.php

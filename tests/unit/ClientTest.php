@@ -6,6 +6,7 @@ namespace unit;
 
 use ReflectionClass;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 final class ClientTest extends TestCase
 {
@@ -25,6 +26,7 @@ final class ClientTest extends TestCase
      * @dataProvider getUrlSet
      * @covers UnoserverClient\Client::getUrl
      */
+    #[DataProvider('getUrlSet')]
     public function testGetUrl(string $host, string $port, bool $ssl, string $url): void
     {
         $obj = $this->getMockForAbstractClass('UnoserverClient\Client', [$host, $port, $ssl]);

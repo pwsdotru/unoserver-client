@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace unit;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionClass;
 use UnoserverClient\Compare;
 
@@ -54,6 +55,7 @@ final class CompareTest extends TestCase
      * @dataProvider setOutputFormatSet
      * @covers UnoserverClient\Compare::setOutputFormat
      */
+    #[DataProvider('setOutputFormatSet')]
     public function testSetOutputFormat($input, $expected): void
     {
         $obj = new Compare();

@@ -7,12 +7,13 @@ namespace unit;
 use ReflectionClass;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use UnoserverClient\Client;
 
 final class ClientTest extends TestCase
 {
     public function testContructDefault(): void
     {
-        $obj = $this->getMockForAbstractClass('UnoserverClient\Client');
+        $obj = $this->getClientMock();
         self::assertFalse(self::getPrivateProperty($obj, "_ssl"));
         self::assertEquals("2003", self::getPrivateProperty($obj, "_port"));
         self::assertEquals("127.0.0.1", self::getPrivateProperty($obj, "_host"));
@@ -29,7 +30,7 @@ final class ClientTest extends TestCase
     #[DataProvider('getUrlSet')]
     public function testGetUrl(string $host, string $port, bool $ssl, string $url): void
     {
-        $obj = $this->getMockForAbstractClass('UnoserverClient\Client', [$host, $port, $ssl]);
+        $obj = $this->getClientMock($host, $port, $ssl);
         $reflectionClass = new ReflectionClass($obj);
         $method = $reflectionClass->getMethod("getUrl");
         $method->setAccessible(true);
@@ -54,7 +55,7 @@ final class ClientTest extends TestCase
     public function testReadFileSuccess(): void
     {
         $file = dirname(__DIR__) . "/fixtures/test.txt";
-        $obj = $this->getMockForAbstractClass('UnoserverClient\Client');
+        $obj = $this->getClientMock();
         $reflectionClass = new ReflectionClass($obj);
         $method = $reflectionClass->getMethod("readFile");
         $method->setAccessible(true);
@@ -68,7 +69,7 @@ final class ClientTest extends TestCase
      */
     public function testReadFileFail(): void
     {
-        $obj = $this->getMockForAbstractClass('UnoserverClient\Client');
+        $obj = $this->getClientMock();
         $reflectionClass = new ReflectionClass($obj);
         $method = $reflectionClass->getMethod("readFile");
         $method->setAccessible(true);
@@ -82,7 +83,7 @@ final class ClientTest extends TestCase
      */
     public function testSaveFileFail(): void
     {
-        $obj = $this->getMockForAbstractClass('UnoserverClient\Client');
+        $obj = $this->getClientMock();
         $result = $obj->saveFile("empty.txt");
         self::assertFalse($result);
         self::assertNotEmpty(self::getPrivateProperty($obj, '_errors'));
@@ -95,7 +96,7 @@ final class ClientTest extends TestCase
      */
     public function testLogError(): void
     {
-        $obj = $this->getMockForAbstractClass('UnoserverClient\Client');
+        $obj = $this->getClientMock();
         $reflectionClass = new ReflectionClass($obj);
         $method = $reflectionClass->getMethod("logError");
         $method->setAccessible(true);
@@ -103,6 +104,24 @@ final class ClientTest extends TestCase
         self::assertEquals(["Test error"], $obj->errors());
         $method->invoke($obj, "Test error 2");
         self::assertEquals(["Test error", "Test error 2"], $obj->errors());
+    }
+
+    protected function getClientMock(string $host = "127.0.0.1", string $port = "2003", bool $ssl = false)
+    {
+        return new class ($host, $port, $ssl) extends Client {
+            protected function getMethodName(): string
+            {
+                return "Mock";
+            }
+            protected function validateInput(): bool
+            {
+                return true;
+            }
+            protected function parseResult(): bool
+            {
+                return true;
+            }
+        };
     }
 
     protected static function getPrivateProperty(object $object, string $propertyName)

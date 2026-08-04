@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace unit;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionClass;
 use UnoserverClient\Convert;
 
@@ -54,6 +55,7 @@ final class ConvertTest extends TestCase
      * @dataProvider setOutputFormatSet
      * @covers UnoserverClient\Convert::setOutputFormat
      */
+    #[DataProvider('setOutputFormatSet')]
     public function testSetOutputFormat($input, $expected): void
     {
         $obj = new Convert();

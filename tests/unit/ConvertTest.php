@@ -25,7 +25,7 @@ final class ConvertTest extends TestCase
     }
 
     /**
-     * @covers UnoserverClient\Conver::validateInput
+     * @covers UnoserverClient\Convert::validateInput
      */
     public function testValidateInput(): void
     {
@@ -49,8 +49,8 @@ final class ConvertTest extends TestCase
     }
 
     /**
-     * @param $input
-     * @param $expected
+     * @param string $input
+     * @param string $expected
      * @throws \ReflectionException
      * @dataProvider setOutputFormatSet
      * @covers UnoserverClient\Convert::setOutputFormat
@@ -64,6 +64,9 @@ final class ConvertTest extends TestCase
         self::assertEquals($expected, $params[3]);
     }
 
+    /**
+     * @return array <int, list<string>>
+     */
     public static function setOutputFormatSet(): array
     {
         return [
@@ -106,7 +109,7 @@ final class ConvertTest extends TestCase
     /**
      * Service method for access to UnoserverClient\Convert::buildParams
      * @param Convert $obj
-     * @return array
+     * @return array <mixed>
      * @throws \ReflectionException
      */
     protected function getConvertParams(Convert $obj): array

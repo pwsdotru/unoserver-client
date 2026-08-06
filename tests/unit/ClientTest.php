@@ -38,6 +38,9 @@ final class ClientTest extends TestCase
         self::assertEquals($url, $result);
     }
 
+    /**
+     * @return array <int, list<mixed>>
+     */
     public static function getUrlSet(): array
     {
         return [
@@ -106,6 +109,12 @@ final class ClientTest extends TestCase
         self::assertEquals(["Test error", "Test error 2"], $obj->errors());
     }
 
+    /**
+     * @param string $host
+     * @param string $port
+     * @param bool $ssl
+     * @return Client
+     */
     protected function getClientMock(string $host = "127.0.0.1", string $port = "2003", bool $ssl = false)
     {
         return new class ($host, $port, $ssl) extends Client {
@@ -124,6 +133,12 @@ final class ClientTest extends TestCase
         };
     }
 
+    /**
+     * @param object $object
+     * @param string $propertyName
+     * @return mixed
+     * @throws \ReflectionException
+     */
     protected static function getPrivateProperty(object $object, string $propertyName)
     {
         $reflectionClass = new ReflectionClass($object);

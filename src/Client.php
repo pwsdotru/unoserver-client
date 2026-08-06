@@ -10,12 +10,15 @@ abstract class Client
     protected string $_port;
     protected bool $_ssl;
 
-    /** @var array list of params for xmlrpc call. Params is unnamed, so order is important */
+    /** @var string[] list of params for xmlrpc call. Params is unnamed, so order is important */
     protected $fieldsList = [];
+    /** @var array <string, mixed> */
     protected $params = [];
-    /** @var array list of errors */
+    /** @var string[] list of errors */
     protected $_errors = [];
+    /** @var mixed  */
     protected $_rawresult = null;
+    /** @var mixed  */
     protected $_result = null;
 
     /**
@@ -58,7 +61,7 @@ abstract class Client
 
     /**
      * Return list of errors
-     * @return array
+     * @return array <int, string>
      */
     public function errors(): array
     {
@@ -69,7 +72,7 @@ abstract class Client
      * Read file and return binary data.
      * Return null on error
      * @param string $filename
-     * @return mixed binary data
+     * @return string
      */
     protected function readFile(string $filename): ?string
     {
@@ -106,13 +109,17 @@ abstract class Client
         return false;
     }
 
+    /**
+     * @param array<int, mixed> $params
+     * @return bool
+     */
     protected function makeXmlRpc(array $params): bool
     {
         $request = xmlrpc_encode_request($this->getMethodName(), $params, ['encoding' => 'UTF-8']);
         $request = str_replace("<string/>", "<nil/>", $request);
 
         $response = $this->makeCurl($request);
-        if (empty($response)) {
+        if (empty($response) || is_bool($response)) {
             $this->logError("Empty response from Unoserver");
             return false;
         }
@@ -134,19 +141,23 @@ abstract class Client
         return true;
     }
 
+    /**
+     * @param string $request
+     * @return string|null|bool
+     */
     protected function makeCurl($request)
     {
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $this->getUrl());
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: text/xml"));
         curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
 
         $response = curl_exec($ch);
 
-        if (curl_errno($ch)) {
+        if (false === $response || curl_errno($ch)) {
             $this->logError(sprintf("cURL error No %d %s", curl_errno($ch), curl_error($ch)));
             $this->logError(sprintf("Server response: %s ", $response));
             $response = null;
@@ -165,7 +176,7 @@ abstract class Client
     }
     /**
      * Build URL for XML-PPC request
-     * @return string
+     * @return non-empty-string
      */
     protected function getUrl(): string
     {
@@ -182,6 +193,9 @@ abstract class Client
         return $protocol . "://" . $host . ":" . $this->_port;
     }
 
+    /**
+     * @return array <int, mixed>
+     */
     protected function buildParams(): array
     {
         $result = [];

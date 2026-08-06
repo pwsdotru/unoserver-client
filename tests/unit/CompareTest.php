@@ -49,8 +49,8 @@ final class CompareTest extends TestCase
     }
 
     /**
-     * @param $input
-     * @param $expected
+     * @param string $input
+     * @param string $expected
      * @throws \ReflectionException
      * @dataProvider setOutputFormatSet
      * @covers UnoserverClient\Compare::setOutputFormat
@@ -64,6 +64,9 @@ final class CompareTest extends TestCase
         self::assertEquals($expected, $params[5]);
     }
 
+    /**
+     * @return array <int, list<string>>
+     */
     public static function setOutputFormatSet(): array
     {
         return [
@@ -106,7 +109,7 @@ final class CompareTest extends TestCase
 
     /**
      * @throws \ReflectionException
-     * @covers UnoserverClient\Conpare::loadNewFile
+     * @covers UnoserverClient\Compare::loadNewFile
      */
     public function testLoadNewFile(): void
     {
@@ -138,7 +141,7 @@ final class CompareTest extends TestCase
     /**
      * Service method for access to UnoserverClient\Compare::buildParams
      * @param Compare $obj
-     * @return array
+     * @return array <mixed>
      * @throws \ReflectionException
      */
     protected function getCompareParams(Compare $obj): array

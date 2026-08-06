@@ -6,6 +6,7 @@ namespace UnoserverClient;
 
 class Convert extends Client
 {
+    /** @var string[]  */
     protected $fieldsList = [
         0 => "inpath",
         1 => "indata",
@@ -18,6 +19,7 @@ class Convert extends Client
         8 => "password",
     ];
 
+    /** @var array <string, mixed> */
     protected $params = [
         "inpath" => null,
         "indata" => null,

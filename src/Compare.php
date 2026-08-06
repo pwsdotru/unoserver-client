@@ -6,6 +6,7 @@ namespace UnoserverClient;
 
 class Compare extends Client
 {
+    /** @var string[]  */
     protected $fieldsList = [
         0 => "oldpath",
         1 => "olddata",
@@ -15,6 +16,7 @@ class Compare extends Client
         5 => "filetype",
     ];
 
+    /** @var array <string, mixed> */
     protected $params = [
         "oldpath" => null,
         "olddata" => null,

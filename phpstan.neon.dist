@@ -1,11 +1,9 @@
 includes:
+    - phpstan-ignore-by-php-version.neon.php
     - vendor/phpstan/phpstan-phpunit/extension.neon
     - vendor/phpstan/phpstan-phpunit/rules.neon
 parameters:
-    level: 7
+    level: 8
     paths:
         - src/
         - tests/unit/
-    ignoreErrors:
-        -
-            identifier: attribute.notFound

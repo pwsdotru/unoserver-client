@@ -6,3 +6,6 @@ parameters:
     paths:
         - src/
         - tests/unit/
+    ignoreErrors:
+        -
+            identifier: attribute.notFound

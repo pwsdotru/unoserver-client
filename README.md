@@ -1,3 +1,5 @@
+[![PHP CI](https://github.com/pwsdotru/unoserver-client/actions/workflows/php.yml/badge.svg)](https://github.com/pwsdotru/unoserver-client/actions/workflows/php.yml)
+
 ## PHP Client for Unoserver
 
 PHP Client for connect to remote UnoServer via XMLRPC.

@@ -1,5 +1,5 @@
 [![PHP CI](https://github.com/pwsdotru/unoserver-client/actions/workflows/php.yml/badge.svg)](https://github.com/pwsdotru/unoserver-client/actions/workflows/php.yml)
-
+[![Release](https://img.shields.io/github/v/release/pwsdotru/unoserver-client)](https://github.com/pwsdotru/unoserver-client/releases/latest)
 ## PHP Client for Unoserver
 
 PHP Client for connect to remote UnoServer via XMLRPC.

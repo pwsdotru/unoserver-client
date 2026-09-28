@@ -27,7 +27,7 @@ class Convert extends Client
         "convert_to" => null,
         "filtername" => null,
         "filter_options" => [],
-        "update_index" => true,
+        "update_index" => null,
         "infiltername" => null,
         "password" => null,
     ];
@@ -51,6 +51,14 @@ class Convert extends Client
         $this->params["indata"] = $data;
     }
 
+    /**
+     * Set params for update input file on open
+     * @param bool $flag
+     */
+    public function setUpdateIndex(bool $flag): void
+    {
+        $this->params['update_index'] = $flag;
+    }
     /**
      * Load file for convert
      * @param string $filename

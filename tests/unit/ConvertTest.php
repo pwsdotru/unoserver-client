@@ -77,6 +77,18 @@ final class ConvertTest extends TestCase
 
     /**
      * @throws \ReflectionException
+     * @covers UnoserverClient\Convert::setUpdateIndex
+     */
+    public function testSetUpdateIndex(): void
+    {
+        $obj = new Convert();
+        $obj->setUpdateIndex(true);
+        $params = $this->getConvertParams($obj);
+        self::assertTrue($params[6]);
+    }
+
+    /**
+     * @throws \ReflectionException
      * @covers UnoserverClient\Convert::loadFile
      */
     public function testLoadFile(): void

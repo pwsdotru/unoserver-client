@@ -12,7 +12,8 @@ if (count($argv) <= 1) {
     exit(1);
 }
 
-$filename = $argv[1] ?? "";
+$filename = $argv[1];
+$update_index = $argv[2] ?? null;
 
 if (empty($filename) || !file_exists($filename)) {
     printf("Error. Filename is incorrect or file %s not exists\n", $filename);
@@ -24,6 +25,10 @@ $convert->setOutputFormat("pdf");
 if (false === $convert->loadFile($filename)) {
     printf("Error. Can't load file.\n%s\n", implode("\n", $convert->errors()));
     exit(3);
+}
+
+if (null !== $update_index) {
+    $convert->setUpdateIndex((bool)$update_index);
 }
 
 if ($convert->call()) {

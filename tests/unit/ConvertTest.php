@@ -42,7 +42,7 @@ final class ConvertTest extends TestCase
      */
     public function testBuildParams(): void
     {
-        $empty = [null, null, null, null, null, [], true, null, null];
+        $empty = [null, null, null, null, null, [], null, null, null];
         $obj = new Convert();
 
         self::assertEquals($empty, $this->getConvertParams($obj));

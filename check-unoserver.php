@@ -11,7 +11,7 @@ if (count($argv) <= 1) {
     exit(1);
 }
 
-$filename = $argv[1] ?? "";
+$filename = $argv[1];
 
 if (empty($filename) || !file_exists($filename)) {
     printf("Error. Filename is incorrect or file %s not exists\n", $filename);
@@ -19,6 +19,11 @@ if (empty($filename) || !file_exists($filename)) {
 }
 
 $filebody = file_get_contents($filename);
+if (false === $filebody) {
+    printf("Error. Can't read file %s\n", $filename);
+    exit(3);
+}
+
 xmlrpc_set_type($filebody, "base64");
 
 $params = array(null, $filebody, null, "pdf");
@@ -28,7 +33,7 @@ $request = str_replace("<string/>", "<nil/>", $request);
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: text/xml"));
 curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
@@ -40,18 +45,30 @@ if (curl_errno($ch)) {
     printf("\n\nServer response: \n \n %s \n", $response);
 } else {
     curl_close($ch);
-    $result = xmlrpc_decode($response, 'UTF-8');
+
+    if (is_string($response)) {
+        $result = xmlrpc_decode($response, 'UTF-8');
+    } else {
+        printf("Error. Empty XM_RPC response\n");
+        exit(4);
+    }
+
+    if (null === $result) {
+        printf("Error. Can't decode XM_RPC response\n");
+        exit(5);
+    }
 
     if (is_array($result)) {
         if (xmlrpc_is_fault($result)) {
             printf("XML-RPC Fault with code  %s: %s \n", (string)$result['faultCode'], $result['faultString']);
         } else {
-            printf("\n\nResult from the server: \n %s \n", print_r($result, 1));
+            printf("\n\nResult from the server: \n %s \n", print_r($result, true));
         }
-    } else {
+    } elseif (is_object($result)) {
         if (
-            is_object($result) && property_exists($result, 'scalar') &&
-            property_exists($result, 'xmlrpc_type') && $result->xmlrpc_type === 'base64'
+            property_exists($result, 'scalar')
+            && property_exists($result, 'xmlrpc_type')
+            && $result->xmlrpc_type === 'base64'
         ) {
             $resultfile = $filename . ".pdf";
             printf("Processed. Save file to: %s\n", $resultfile);
@@ -59,7 +76,9 @@ if (curl_errno($ch)) {
                 printf("Saved\n");
             }
         } else {
-            printf("Error: Unknow object in result: %s\n", print_r($result, true));
+            printf("Error: Unknown object in result: %s\n", print_r($result, true));
         }
+    } else {
+        printf("Error. Can't decode XM_RPC response\n");
     }
 }

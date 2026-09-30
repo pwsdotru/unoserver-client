@@ -12,9 +12,9 @@ if (count($argv) != 4) {
     exit(1);
 }
 
-$oldname = $argv[1] ?? "";
-$newname = $argv[2] ?? "";
-$format =  $argv[3] ?? "";
+$oldname = $argv[1];
+$newname = $argv[2];
+$format =  $argv[3];
 
 if (empty($oldname) || !file_exists($oldname)) {
     printf("Error. Filename is incorrect or file %s not exists\n", $oldname);

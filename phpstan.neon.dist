@@ -7,3 +7,7 @@ parameters:
     paths:
         - src/
         - tests/unit/
+        - check-xmlrpc.php
+        - check-ping.php
+        - check-convert.php
+        - check-compare.php

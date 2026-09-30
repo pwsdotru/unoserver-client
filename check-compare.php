@@ -7,7 +7,7 @@ require_once("vendor/autoload.php");
 $host = "127.0.0.1";
 $port = "2003";
 
-if (count($argv) != 4) {
+if (empty($argv) || count($argv) != 4) {
     printf("Usage:\n %s oldfile newfile format\n", $argv[0]);
     exit(1);
 }

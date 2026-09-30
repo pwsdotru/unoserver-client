@@ -7,7 +7,7 @@ require_once("vendor/autoload.php");
 $host = "127.0.0.1";
 $port = "2003";
 
-if (count($argv) <= 1) {
+if (empty($argv) || count($argv) <= 1) {
     printf("Usage file name for convert as argument for command line\n");
     exit(1);
 }

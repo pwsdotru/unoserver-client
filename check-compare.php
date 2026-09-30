@@ -8,7 +8,7 @@ $host = "127.0.0.1";
 $port = "2003";
 
 if (empty($argv) || count($argv) != 4) {
-    printf("Usage:\n %s oldfile newfile format\n", $argv[0]);
+    printf("Usage:\ncheck-compare.php oldfile newfile format\n");
     exit(1);
 }
 

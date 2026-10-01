@@ -36,29 +36,43 @@ class Convert extends Client
      * Set output format for convert
      * @param string $format
      */
-    public function setOutputFormat(string $format): void
+    public function setOutputFormat(string $format): self
     {
         $this->params["convert_to"] = strtolower($format);
+        return $this;
     }
 
     /**
      * Set input binary data for convert
      * @param string $data
      */
-    public function setInputData(string $data): void
+    public function setInputData(string $data): self
     {
         xmlrpc_set_type($data, "base64");
         $this->params["indata"] = $data;
+        return $this;
     }
 
     /**
      * Set params for update input file on open
      * @param bool $flag
      */
-    public function setUpdateIndex(bool $flag): void
+    public function setUpdateIndex(bool $flag): self
     {
         $this->params['update_index'] = $flag;
+        return $this;
     }
+
+    /**
+     * Set password for open source doc
+     * @param string $password
+     */
+    public function setPassword(string $password): self
+    {
+        $this->params['password']  = $password;
+        return $this;
+    }
+
     /**
      * Load file for convert
      * @param string $filename

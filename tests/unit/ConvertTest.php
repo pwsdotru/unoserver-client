@@ -89,6 +89,18 @@ final class ConvertTest extends TestCase
 
     /**
      * @throws \ReflectionException
+     * @covers UnoserverClient\Convert::setPassword
+     */
+    public function testSetPassword(): void
+    {
+        $obj = new Convert();
+        $obj->setPassword('test');
+        $params = $this->getConvertParams($obj);
+        self::assertEquals('test', $params[8]);
+    }
+
+    /**
+     * @throws \ReflectionException
      * @covers UnoserverClient\Convert::loadFile
      */
     public function testLoadFile(): void

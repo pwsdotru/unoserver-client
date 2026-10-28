@@ -1,4 +1,4 @@
-FROM eclipse-temurin:24.0.1_9-jdk-alpine-3.21
+FROM eclipse-temurin:27_35-jdk-resolute
 
 ARG BUILD_CONTEXT="build-context"
 ARG UID=worker
@@ -15,30 +15,37 @@ LABEL org.opencontainers.image.url="https://github.com/unoconv/unoserver-docker"
 
 WORKDIR /
 
-RUN addgroup -S ${GID} && adduser -S ${UID} -G ${GID}
+RUN addgroup ${GID} && adduser --ingroup ${GID} ${UID}
 
-RUN apk add --no-cache \
+RUN apt-get update
+
+RUN apt-get install -y \
     bash curl \
-    py3-pip \
     libreoffice \
     supervisor
 
-# fonts - https://wiki.alpinelinux.org/wiki/Fonts
-RUN apk add --no-cache \
-    font-noto font-noto-cjk font-noto-extra \
-    terminus-font \
-    ttf-font-awesome \
-    ttf-dejavu \
-    ttf-freefont \
-    ttf-hack \
-    ttf-inconsolata \
-    ttf-liberation \
-    ttf-mononoki  \
-    ttf-opensans   \
-    fontconfig && \
-    fc-cache -f
+RUN apt-get install -y \
+    python3 \
+    python3-pip
 
-RUN rm -rf /var/cache/apk/* /tmp/*
+# fonts - https://wiki.alpinelinux.org/wiki/Fonts
+#RUN apt-get install -y \
+#    font-noto font-noto-cjk font-noto-extra \
+#    terminus-font \
+#    ttf-font-awesome \
+#    ttf-dejavu \
+#    ttf-freefont \
+#    ttf-hack \
+#    ttf-inconsolata \
+#    ttf-liberation \
+#    ttf-mononoki  \
+#    ttf-opensans   \
+#    fontconfig && \
+#    fc-cache -f
+
+
+
+RUN rm -rf /var/lib/apt/lists/* /tmp/*
 
 # https://github.com/unoconv/unoserver/
 RUN pip install --break-system-packages -U unoserver==${VERSION_UNOSERVER}

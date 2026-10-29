@@ -29,21 +29,17 @@ RUN apt-get install -y \
     python3-pip
 
 # fonts - https://wiki.alpinelinux.org/wiki/Fonts
-#RUN apt-get install -y \
-#    font-noto font-noto-cjk font-noto-extra \
-#    terminus-font \
-#    ttf-font-awesome \
-#    ttf-dejavu \
-#    ttf-freefont \
-#    ttf-hack \
-#    ttf-inconsolata \
-#    ttf-liberation \
-#    ttf-mononoki  \
-#    ttf-opensans   \
-#    fontconfig && \
-#    fc-cache -f
+RUN apt-get install -y \
+    fonts-noto \
+    fonts-noto-cjk \
+    fonts-freefont-ttf \
+    fonts-terminus \
+    fonts-font-awesome
 
+RUN echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | debconf-set-selections && \
+    apt-get install -y ttf-mscorefonts-installer
 
+RUN fc-cache -f -r -v
 
 RUN rm -rf /var/lib/apt/lists/* /tmp/*
 
